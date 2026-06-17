@@ -1,0 +1,12 @@
+# Secrets — never commit your bot token
+.env
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# OS
+.DS_Store

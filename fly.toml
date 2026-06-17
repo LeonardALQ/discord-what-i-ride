@@ -1,0 +1,13 @@
+# Fly.io config. The bot is a worker — there is intentionally no [http_service]
+# or [[services]] block, because it makes only outbound connections to Discord.
+app = "whatiride-bot"
+primary_region = "syd"  # Sydney; change to your nearest region
+
+[build]
+
+[processes]
+  app = "python bot.py"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"
