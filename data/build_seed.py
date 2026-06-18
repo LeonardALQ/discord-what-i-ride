@@ -224,6 +224,23 @@ SPEC: dict[str, list[tuple]] = {
         ("DSR/X", "", "Electric", 0, 2022, CURRENT_YEAR),
         ("FX", "", "Electric", 0, 2013, CURRENT_YEAR),
     ],
+    # Niche track-only manufacturers.
+    "Kraemer": [
+        # US-built, KTM 690 LC4 single-cylinder track bikes.
+        ("GP2 690", "", "Track", 693, 2018, CURRENT_YEAR),
+        ("GP2 690", "R", "Track", 693, 2020, CURRENT_YEAR),
+        ("APR690", "", "Track", 693, 2021, CURRENT_YEAR),
+        ("APR690", "RR", "Track", 693, 2022, CURRENT_YEAR),
+    ],
+    "Ohvale": [
+        # Italian mini-GP / minimoto track bikes.
+        ("GP-0", "110", "Mini GP", 110, 2016, CURRENT_YEAR),
+        ("GP-0", "160", "Mini GP", 160, 2016, CURRENT_YEAR),
+        ("GP-0", "190 Daytona", "Mini GP", 187, 2018, CURRENT_YEAR),
+        ("GP-0", "212 Daytona", "Mini GP", 212, 2019, CURRENT_YEAR),
+        ("GP-2", "190 Daytona", "Mini GP", 187, 2020, CURRENT_YEAR),
+        ("GP-2", "212 Daytona", "Mini GP", 212, 2020, CURRENT_YEAR),
+    ],
 }
 
 FIELDNAMES = ["make", "model", "badge", "category", "displacement_cc", "year"]
