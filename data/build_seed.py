@@ -31,6 +31,7 @@ SPEC: dict[str, list[tuple]] = {
         ("CBR600RR", "", "Sport", 599, 2003, CURRENT_YEAR),
         ("CBR650R", "", "Sport", 649, 2019, CURRENT_YEAR),
         ("CBR500R", "", "Sport", 471, 2013, CURRENT_YEAR),
+        ("CBR300R", "", "Sport", 286, 2015, CURRENT_YEAR),
         ("CB1000R", "Neo Sports Cafe", "Naked", 998, 2018, CURRENT_YEAR),
         ("CB650R", "", "Naked", 649, 2019, CURRENT_YEAR),
         ("CB500F", "", "Naked", 471, 2013, CURRENT_YEAR),
