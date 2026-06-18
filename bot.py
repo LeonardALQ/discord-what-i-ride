@@ -96,6 +96,27 @@ def build_results_embed(results: list[MatchResult]) -> discord.Embed:
                     value=f"{rec.displacement_cc}cc" if rec.displacement_cc else "—",
                     inline=True)
     embed.add_field(name="Confidence", value=f"{best.score:.0f}%", inline=True)
+
+    # Extra specs from the dataset, shown when available.
+    power = rec.spec("power_hp")
+    if power:
+        embed.add_field(name="Power", value=f"{power} hp", inline=True)
+    engine = rec.spec("engine")
+    cooling = rec.spec("cooling")
+    if engine:
+        embed.add_field(name="Engine layout",
+                        value=engine + (f", {cooling}-cooled" if cooling else ""),
+                        inline=True)
+    weight = rec.spec("dry_weight_kg")
+    if weight:
+        embed.add_field(name="Dry weight", value=f"{weight} kg", inline=True)
+    seat = rec.spec("seat_height_mm")
+    if seat:
+        embed.add_field(name="Seat height", value=f"{seat} mm", inline=True)
+    gearbox = rec.spec("gearbox")
+    if gearbox:
+        embed.add_field(name="Gearbox", value=gearbox, inline=True)
+
     if len(results) > 1:
         embed.add_field(
             name="Other possibilities",

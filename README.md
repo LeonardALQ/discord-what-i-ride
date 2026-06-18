@@ -51,9 +51,10 @@ whatiride-bot/
 ├── requirements.txt
 ├── .env.example            # copy to .env and fill in
 ├── data/
-│   ├── build_seed.py       # generates data/bikes.csv from a curated spec
-│   ├── fetch_dataset.py    # OPTIONAL: enrich dataset from API Ninjas
-│   └── bikes.csv           # generated dataset
+│   ├── import_kaggle.py     # builds data/imported.csv from Kaggle bikez (~38k)
+│   ├── build_supplement.py  # builds data/supplement.csv (niche bikes base misses)
+│   ├── imported.csv         # comprehensive base dataset (committed)
+│   └── supplement.csv       # small curated niche dataset (committed)
 ├── src/
 │   ├── dataset.py          # CSV loader -> unique model records w/ year ranges
 │   ├── matcher.py          # fuzzy matching + scoring
@@ -71,8 +72,8 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
-# dataset ships generated, but you can rebuild it any time:
-python data/build_seed.py
+# the dataset (data/imported.csv + data/supplement.csv) ships in the repo;
+# no need to rebuild it to run the bot.
 
 cp .env.example .env
 # edit .env: set DISCORD_TOKEN and GUILD_ID
@@ -102,14 +103,28 @@ rider a role for their bike's manufacturer (e.g. `Honda`). This stays well under
 Discord's 250-role cap because it's one role per brand, not per model. The bot's
 role must sit **above** any role it assigns (Server Settings > Roles).
 
-## Expanding the dataset
+## The dataset
 
-`data/bikes.csv` ships with ~1,700 rows (17 makes, real model lineups expanded
-across year ranges). To grow it:
+Two committed CSVs are merged at load (`src/dataset.py`):
 
-- **Edit the curated spec** in `data/build_seed.py` and re-run it, or
-- **Pull from API Ninjas** (free tier): get a key at https://api-ninjas.com,
-  then `export API_NINJAS_KEY=your_key && python data/fetch_dataset.py`.
+- **`data/imported.csv`** — the comprehensive base: ~38k models / 570+ makes
+  from the Kaggle "all_bikez_curated" dataset (the bikez.com catalog), carrying
+  specs (power, engine, cooling, gearbox, transmission, dry weight, seat height,
+  fuel capacity, wheelbase). Collapses to ~18k unique model records.
+- **`data/supplement.csv`** — a small curated set of niche bikes the base
+  misses (e.g. Kraemer, Stark Future, Sur-Ron, Talaria, extra Ohvale variants).
+
+Both ship in the repo, so the deployed bot needs **no** Kaggle/API access.
+
+To refresh or grow the data (dev machine only):
+
+- **Rebuild the base from Kaggle:** put your Kaggle credentials in
+  `~/.kaggle/kaggle.json` (username + key), then `python data/import_kaggle.py`.
+- **Add niche bikes:** edit the `SPEC` in `data/build_supplement.py` (only add
+  what the base genuinely lacks — verify against `imported.csv`), then
+  `python data/build_supplement.py`.
+- API Ninjas can enrich *specific* models (`?make=&model=`) but its free tier
+  can't paginate, so it isn't used for the bulk import.
 
 ## Tests
 
