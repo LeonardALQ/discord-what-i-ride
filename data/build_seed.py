@@ -231,6 +231,8 @@ SPEC: dict[str, list[tuple]] = {
         ("GP2 690", "R", "Track", 693, 2020, CURRENT_YEAR),
         ("APR690", "", "Track", 693, 2021, CURRENT_YEAR),
         ("APR690", "RR", "Track", 693, 2022, CURRENT_YEAR),
+        # KTM 890 parallel-twin track bike.
+        ("890RR", "", "Track", 889, 2022, CURRENT_YEAR),
     ],
     "Ohvale": [
         # Italian mini-GP / minimoto track bikes.
