@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import csv
 import os
+from collections import Counter
 from dataclasses import dataclass, field
 
 _DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
@@ -38,6 +39,8 @@ class BikeRecord:
     year_max: int
     specs: dict[str, str] = field(default_factory=dict, repr=False)
     _years: set[int] = field(default_factory=set, repr=False)
+    _cc_counts: Counter = field(default_factory=Counter, repr=False)
+    _cat_counts: Counter = field(default_factory=Counter, repr=False)
 
     @property
     def display_name(self) -> str:
@@ -101,10 +104,10 @@ def _ingest(path: str, grouped: dict[tuple, BikeRecord]) -> None:
                 rec._years.add(year)
                 rec.year_min = min(rec.year_min, year)
                 rec.year_max = max(rec.year_max, year)
-            if cc and not rec.displacement_cc:
-                rec.displacement_cc = cc
-            if category and not rec.category:
-                rec.category = category
+            if cc:
+                rec._cc_counts[cc] += 1
+            if category:
+                rec._cat_counts[category] += 1
             # Fill any missing spec fields from this row.
             for f in SPEC_FIELDS:
                 val = (row.get(f) or "").strip()
@@ -130,6 +133,11 @@ def load_records(imported: str | None = None,
     for rec in records:
         if rec.year_min == 9999:
             rec.year_min = rec.year_max = 0
+        # Use the most common value across years (ignores single bad rows).
+        if rec._cc_counts:
+            rec.displacement_cc = rec._cc_counts.most_common(1)[0][0]
+        if rec._cat_counts:
+            rec.category = rec._cat_counts.most_common(1)[0][0]
     return records
 
 
